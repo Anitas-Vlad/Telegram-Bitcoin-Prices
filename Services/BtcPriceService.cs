@@ -19,7 +19,7 @@ public class BtcPriceService : IBtcPriceService
         {
             var response = await _httpClient.GetStringAsync(Settings.BinanceApiUrl);
             var priceData = JsonSerializer.Deserialize<PriceResponse>(response);
-            return decimal.Parse(priceData.Price);
+            return decimal.Parse(priceData.price);
         }
         catch (Exception ex)
         {
@@ -27,4 +27,6 @@ public class BtcPriceService : IBtcPriceService
             return 0;
         }
     }
+    
+    
 }

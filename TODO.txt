@@ -1,0 +1,3 @@
+﻿
+
+Set Up WebHook or Polling. listen to telegram messages and start/stop the application.

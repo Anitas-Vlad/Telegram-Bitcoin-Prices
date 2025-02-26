@@ -2,5 +2,5 @@
 
 public class PriceResponse
 {
-    public string Price { get; set; }
+    public string price { get; set; }
 }
