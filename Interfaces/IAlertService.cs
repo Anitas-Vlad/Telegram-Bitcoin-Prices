@@ -8,5 +8,5 @@ public interface IAlertService
 
     Task SendSellWarningAlert(decimal currentPrice);
 
-    Task SendTargetSellAlert(decimal currentPrice);
+    Task SendSellTargetAlert(decimal currentPrice);
 }

@@ -37,7 +37,7 @@ public class AlertService : IAlertService
         await _telegramService.SendMessageAsync($"WARNING. BTC Price fell at {currentPrice}");
     }
     
-    public async Task SendTargetSellAlert(decimal currentPrice)
+    public async Task SendSellTargetAlert(decimal currentPrice)
     {
         if (currentPrice == 0) return;
         await _telegramService.SendMessageAsync($"Target Achieved. BTC Price is {currentPrice}");
