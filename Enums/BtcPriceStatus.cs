@@ -1,9 +1,9 @@
 ﻿namespace TelegramBitcoinPrices.Enums;
 
-public enum StatusType
+public enum BtcPriceStatus
 {
     Buy,
-    SellTarget,
-    SellSafe,
+    Rise,
+    Drop,
     Skip
 }

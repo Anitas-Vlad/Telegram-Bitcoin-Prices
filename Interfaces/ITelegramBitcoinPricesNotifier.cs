@@ -2,5 +2,8 @@
 
 public interface ITelegramBitcoinPricesNotifier
 {
-    Task Start();
+    Task Start(string input);
+    Task Stop();
+
+    Task Run();
 }

@@ -1,3 +1,9 @@
 ﻿
 
-Set Up WebHook or Polling. listen to telegram messages and start/stop the application.
+TODO Set Up WebHook or Polling. listen to telegram messages and start/stop the application.
+
+TODO * Message "Buy"
+* Sets a variable to the current price , telling the program you bought the btc at that price.
+Algorithm * After having that variable, the program can tell when you should safe sell.
+
+TODO * Refactor AlertTypes. They are wrong. Fix the names and their meaning.
