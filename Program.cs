@@ -15,8 +15,9 @@ await telegramBitcoinPricesNotifier.Run();
 
 return;
 
-static IHostBuilder CreateHostBuilder(string[] args) =>
-    Host.CreateDefaultBuilder(args)
+static IHostBuilder CreateHostBuilder(string[] args)
+{
+    return Host.CreateDefaultBuilder(args)
         .ConfigureServices((_, services) =>
         {
             services.AddSingleton<HttpClient>();
@@ -24,5 +25,6 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
             services.AddSingleton<ITelegramService, TelegramService>();
             services.AddSingleton<IAlertService, AlertService>();
             services.AddSingleton<ITelegramBitcoinPricesNotifier, TelegramBitcoinPricesNotifier>();
-            services.AddSingleton<IInputParser, InputParser>();
+            services.AddSingleton<IInputParserService, InputParserServiceServiceService>();
         });
+}

@@ -1,8 +1,10 @@
-﻿namespace TelegramBitcoinPrices.Input;
+﻿using System.Text.RegularExpressions;
+
+namespace TelegramBitcoinPrices.Input;
 
 public static class InputValidator
 {
-    public static void Validate(string input)
+    public static void ValidateStartCommand(string input)
     {
         var parts = input.Split(' ');
 
@@ -15,5 +17,16 @@ public static class InputValidator
 
         if (!decimal.TryParse(parts[2], out _))
             throw new ArgumentException("The second number must be a valid decimal.");
+    }
+
+    public static decimal ValidateAndExtractNumber(string message)
+    {
+        if (string.IsNullOrWhiteSpace(message))
+            return 0;
+
+        var match = Regex.Match(message.Trim(), @"^buy\s+(\d+)$", RegexOptions.IgnoreCase);
+        if (match.Success && decimal.TryParse(match.Groups[1].Value, out var number)) return number;
+
+        return 0; // Return null if the format is incorrect
     }
 }

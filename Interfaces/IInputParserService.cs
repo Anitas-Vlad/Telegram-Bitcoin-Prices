@@ -2,7 +2,7 @@
 
 namespace TelegramBitcoinPrices.Interfaces;
 
-public interface IInputParser
+public interface IInputParserService
 {
     BtcRange ParseBtcRange(string input);
 }

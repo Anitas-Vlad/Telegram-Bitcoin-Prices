@@ -27,6 +27,4 @@ public class BtcPriceService : IBtcPriceService
             return 0;
         }
     }
-    
-    
 }

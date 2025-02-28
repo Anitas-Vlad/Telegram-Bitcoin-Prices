@@ -12,8 +12,8 @@ public static class MessageHandler
         {
             // Send a message
             var message = await telegramBotClient.SendMessage(
-                chatId: chatId,
-                text: text
+                chatId,
+                text
             );
             Console.WriteLine($"Message sent: {message.Text}");
         }

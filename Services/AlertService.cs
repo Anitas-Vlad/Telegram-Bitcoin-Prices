@@ -30,13 +30,13 @@ public class AlertService : IAlertService
         if (currentPrice == 0) return;
         await _telegramService.SendMessageAsync($"🔔🔔🔔 BTC: {currentPrice}");
     }
-    
+
     public async Task SendSellWarningAlert(decimal currentPrice)
     {
         if (currentPrice == 0) return;
         await _telegramService.SendMessageAsync($"🟥🟥🟥 BTC: {currentPrice}");
     }
-    
+
     public async Task SendSellTargetAlert(decimal currentPrice)
     {
         if (currentPrice == 0) return;

@@ -6,35 +6,39 @@ namespace TelegramBitcoinPrices;
 
 public class TelegramBitcoinPricesNotifier : ITelegramBitcoinPricesNotifier
 {
-    public bool isActive = false;
+    public readonly IAlertService _alertService;
     public readonly IBtcPriceService _btcPriceService;
     public readonly ITelegramService _telegramService;
-    public readonly IAlertService _alertService;
-    public readonly IInputParser _inputParser;
+    public readonly IInputParserService InputParserService;
 
-    // decimal buyPoint = 83700; // = 0
-    decimal sellSafePoint = 0; // = 0
-    decimal sellTargetPoint = 0; // = 0
-
-    public decimal ActiveLowestPrice = 0;
-    public decimal ActiveHighestPrice = 0;
+    public decimal _buyPoint;
 
     public BtcPriceStatus AwaitedBtcPriceStatus = BtcPriceStatus.Skip;
+    private decimal currentPrice;
+    public decimal HighPriceBorder;
+    public bool isActive;
 
-    decimal currentPrice = 0;
+    // decimal buyPoint = 83700; // = 0
+    // decimal sellSafePoint = 0; // = 0
+    // decimal sellTargetPoint = 0; // = 0
+
+    public decimal LowPriceBorder;
+
 
     public TelegramBitcoinPricesNotifier(IBtcPriceService btcPriceService, ITelegramService telegramService,
-        IAlertService alertService, IInputParser inputParser)
+        IAlertService alertService, IInputParserService inputParserService)
     {
         isActive = true;
         _btcPriceService = btcPriceService;
         _telegramService = telegramService;
         _alertService = alertService;
-        _inputParser = inputParser;
+        InputParserService = inputParserService;
     }
 
     public async Task Run()
     {
+        await _telegramService.InitializeLastUpdateId();
+
         while (true)
         {
             var message = await _telegramService.ListenForCommands();
@@ -43,6 +47,8 @@ public class TelegramBitcoinPricesNotifier : ITelegramBitcoinPricesNotifier
                 await Start(message);
             else if (message.StartsWith("stop"))
                 await Stop();
+            else if (message.StartsWith("buy")) 
+                await SetBuyPoint(message);
 
             await Task.Delay(5000);
         }
@@ -52,7 +58,7 @@ public class TelegramBitcoinPricesNotifier : ITelegramBitcoinPricesNotifier
     {
         try
         {
-            ApplyMinMaxBtcPriceFormula(input);
+            ApplyMinMaxBtcPrice(input);
 
             await _telegramService.SendMessageAsync("Bitcoin Price Tracker started...");
             isActive = true;
@@ -96,21 +102,45 @@ public class TelegramBitcoinPricesNotifier : ITelegramBitcoinPricesNotifier
         }
     }
 
-    private void CheckBtcPrice(decimal currentPrice)
+    public async Task Stop()
     {
-        if (currentPrice > ActiveHighestPrice)
+        isActive = false;
+        LowPriceBorder = 0;
+        HighPriceBorder = 0;
+        Console.WriteLine("Tracker stopped...");
+        await _telegramService.SendMessageAsync("Tracker stopped...");
+    }
+
+    private async Task SetBuyPoint(string message)
+    {
+        var buyPoint = InputValidator.ValidateAndExtractNumber(message);
+
+        if (buyPoint == 0)
         {
-            AwaitedBtcPriceStatus = BtcPriceStatus.Rise;
-            ActiveHighestPrice = currentPrice;
+            await _telegramService.SendMessageAsync($"Invalid buy price: {buyPoint}");
             return;
         }
 
-        if (currentPrice < ActiveLowestPrice)
+        _buyPoint = buyPoint;
+        await _telegramService.SendMessageAsync($"Buy price: {buyPoint}");
+    }
+
+    private void CheckBtcPrice(decimal currentPrice)
+    {
+        if (currentPrice > HighPriceBorder)
         {
-            AwaitedBtcPriceStatus = BtcPriceStatus.Drop;
-            ActiveLowestPrice = currentPrice;
+            AwaitedBtcPriceStatus = BtcPriceStatus.Rise;
+            HighPriceBorder = currentPrice;
             return;
         }
+
+        if (currentPrice < LowPriceBorder)
+        {
+            AwaitedBtcPriceStatus = BtcPriceStatus.Drop;
+            LowPriceBorder = currentPrice;
+            return;
+        }
+
         AwaitedBtcPriceStatus = BtcPriceStatus.Skip;
     }
 
@@ -119,27 +149,14 @@ public class TelegramBitcoinPricesNotifier : ITelegramBitcoinPricesNotifier
     {
     }
 
-    private void ApplyMinMaxBtcPriceFormula(string input)
-        // formula based on btc movement
+    private void ApplyMinMaxBtcPrice(string input)
     {
-        var parser = new InputParser();
-        var range = parser.ParseBtcRange(input);
+        var parserService = new InputParserServiceServiceService();
+        var range = parserService.ParseBtcRange(input);
 
-        sellSafePoint = range.LowBtcPrice;
-        sellTargetPoint = range.HighBtcPrice;
-
-        ActiveLowestPrice = range.LowBtcPrice;
-        ActiveHighestPrice = range.HighBtcPrice;
+        LowPriceBorder = range.LowBtcPrice;
+        HighPriceBorder = range.HighBtcPrice;
 
         _telegramService.SendMessageAsync($"Low Number: {range.LowBtcPrice}, High Number: {range.HighBtcPrice}");
-    }
-
-    public async Task Stop()
-    {
-        isActive = false;
-        sellSafePoint = 0;
-        sellTargetPoint = 0;
-        Console.WriteLine("Tracker stopped...");
-        await _telegramService.SendMessageAsync("Tracker stopped...");
     }
 }
