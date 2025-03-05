@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Telegram.Bot;
 using TelegramBitcoinPrices.Interfaces;
-using TelegramBitcoinPrices.TelegramModels;
+using TelegramBitcoinPrices.Responses.TelegramMessageResponse;
 
 namespace TelegramBitcoinPrices.Services;
 

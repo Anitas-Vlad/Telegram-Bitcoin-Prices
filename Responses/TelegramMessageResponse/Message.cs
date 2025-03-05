@@ -1,4 +1,4 @@
-﻿namespace TelegramBitcoinPrices.TelegramModels;
+﻿namespace TelegramBitcoinPrices.Responses.TelegramMessageResponse;
 
 public class Message
 {
