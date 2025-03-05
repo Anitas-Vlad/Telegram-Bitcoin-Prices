@@ -5,15 +5,7 @@ namespace TelegramBitcoinPrices.Services;
 public class AlertService : IAlertService
 {
     private readonly ITelegramService _telegramService;
-
-    // private bool _buyAlert = true;
-    // private bool _sellAlert = false;
-    // private bool _safeSellAlert = false;
-    //
-    // private readonly decimal _buyAlertPoint = 82000;
-    // private readonly decimal _safeSellPoint = 81950;
-    // private readonly decimal _sellAlertPoint = 82100;
-
+    
     public AlertService(ITelegramService telegramService)
     {
         _telegramService = telegramService;
