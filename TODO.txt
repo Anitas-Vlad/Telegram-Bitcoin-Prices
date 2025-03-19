@@ -7,3 +7,7 @@ TODO * Message "Buy"
 Algorithm * After having that variable, the program can tell when you should safe sell.
 
 TODO * Refactor AlertTypes. They are wrong. Fix the names and their meaning.
+
+TODO * notifications based on CurrentPrice and EMA average. 
+
+TODO * Implement candles.

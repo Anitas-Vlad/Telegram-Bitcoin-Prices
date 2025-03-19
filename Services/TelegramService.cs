@@ -67,7 +67,7 @@ public class TelegramService : ITelegramService
 
                 if (lastUpdate.update_id > _lastUpdateId)
                 {
-                    _lastUpdateId = lastUpdate.update_id; // Mark it as processed
+                    _lastUpdateId = lastUpdate.update_id;
 
                     message = lastUpdate.message.text.Trim().ToLower();
 

@@ -8,7 +8,6 @@ public static class InputValidator
     {
         var parts = input.Split(' ');
 
-        // Check for valid format
         if (parts.Length != 3 || parts[0].ToLower() != "start")
             throw new ArgumentException("Invalid input format. Expected format: 'start <lowNumber> <highNumber>'.");
 

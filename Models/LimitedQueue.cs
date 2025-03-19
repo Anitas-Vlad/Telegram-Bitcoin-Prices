@@ -15,6 +15,5 @@ public class LimitedQueue : Queue<decimal>
             Dequeue();
 
         base.Enqueue(value);
-        Console.WriteLine(Count.ToString());
     }
 }
